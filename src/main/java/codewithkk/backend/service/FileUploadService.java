@@ -60,7 +60,9 @@ public class FileUploadService {
         try {
             Map<String, Object> params = ObjectUtils.asMap(
                 "resource_type", resourceType,
-                "folder", "codewithkk"
+                "folder", "codewithkk",
+                "use_filename", true,
+                "unique_filename", true
             );
             Map<?, ?> result = cloudinary.uploader().upload(file.getBytes(), params);
             return (String) result.get("secure_url");
