@@ -5,6 +5,8 @@ import codewithkk.backend.repository.BundlePurchaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,7 +20,11 @@ public class BundlePurchaseService {
     }
 
     public Optional<BundlePurchase> getPurchaseByUserId(String userId) {
-        return bundlePurchaseRepository.findByUserId(userId);
+        List<BundlePurchase> purchases = bundlePurchaseRepository.findAllByUserId(userId);
+        return purchases.stream()
+                .filter(p -> p.getPurchaseDate() != null)
+                .max(Comparator.comparing(BundlePurchase::getPurchaseDate))
+                .or(() -> purchases.stream().findFirst());
     }
 
     public boolean hasPurchased(String userId) {

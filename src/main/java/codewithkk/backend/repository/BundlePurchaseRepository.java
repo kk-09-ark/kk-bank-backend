@@ -10,6 +10,8 @@ public interface BundlePurchaseRepository extends JpaRepository<BundlePurchase, 
 
     Optional<BundlePurchase> findByUserId(String userId);
 
+    List<BundlePurchase> findAllByUserId(String userId);
+
     boolean existsByUserId(String userId);
 
     List<BundlePurchase> findByStatus(String status);
