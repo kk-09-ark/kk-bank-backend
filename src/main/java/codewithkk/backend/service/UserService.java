@@ -37,6 +37,14 @@ public class UserService {
                 user.getRole(), user.getCreatedAt(), hasPurchased);
     }
 
+    public UserProfileResponse getMe(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        boolean hasPurchased = bundlePurchaseRepository.existsByUserId(user.getId());
+        return new UserProfileResponse(user.getId(), user.getName(), user.getEmail(),
+                user.getRole(), user.getCreatedAt(), hasPurchased);
+    }
+
     public User updateUser(String userId, User updated) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
