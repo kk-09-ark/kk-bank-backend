@@ -18,7 +18,7 @@ public class PaymentController {
 
     @PostMapping("/create-order")
     public ResponseEntity<PaymentOrderResponse> createOrder(@RequestBody java.util.Map<String, Object> body) {
-        double amount = Double.parseDouble(body.getOrDefault("amount", 49).toString());
+        double amount = Double.parseDouble(body.getOrDefault("amount", 22).toString());
         String currency = (String) body.getOrDefault("currency", "INR");
         return ResponseEntity.ok(paymentService.createOrder(amount, currency));
     }
