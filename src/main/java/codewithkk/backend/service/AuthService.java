@@ -25,6 +25,9 @@ public class AuthService {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @org.springframework.beans.factory.annotation.Value("${admin.email:}")
+    private String adminEmail;
+
     public String register(RegisterRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
@@ -57,6 +60,10 @@ public class AuthService {
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new RuntimeException("Invalid Email or Password");
         }
+
+        String role = user.getEmail().equalsIgnoreCase(adminEmail) ? "ROLE_ADMIN" : user.getRole();
+        user.setRole(role);
+        userRepository.save(user);
 
         String token = jwtUtil.generateToken(user.getEmail());
 
