@@ -46,12 +46,13 @@ public class PaymentService {
 
     public BundlePurchase verifyPayment(String razorpayOrderId, String razorpayPaymentId,
                                          String razorpaySignature, String userId, double amount) {
-        try {
-            String generatedSignature = HmacSHA256(
-                    razorpayOrderId + "|" + razorpayPaymentId,
-                    razorpayConfig.getKeyId()
-            );
-        } catch (Exception e) {
+        String generatedSignature = HmacSHA256(
+                razorpayOrderId + "|" + razorpayPaymentId,
+                razorpayConfig.getKeySecret()
+        );
+
+        if (!generatedSignature.equals(razorpaySignature)) {
+            throw new RuntimeException("Invalid payment signature - payment verification failed");
         }
 
         BundlePurchase purchase = new BundlePurchase();
