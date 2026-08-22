@@ -42,7 +42,11 @@ public class AuthService {
         user.setRole("ROLE_USER");
         user.setCreatedAt(LocalDateTime.now());
 
-        userRepository.save(user);
+        try {
+            userRepository.save(user);
+        } catch (org.springframework.dao.DataIntegrityViolationException e) {
+            return "Email already exists";
+        }
 
         return "Registration Successful";
     }
